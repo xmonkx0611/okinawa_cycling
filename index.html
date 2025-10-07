@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>沖繩本島三日單車環島</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body class="min-h-screen bg-slate-50 text-slate-800">
+  <!-- Navbar -->
+  <header class="sticky top-0 z-30 bg-white/90 backdrop-blur border-b border-slate-200">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div class="text-lg font-semibold tracking-wide">沖繩本島三日單車環島</div>
+      <nav class="flex gap-4 text-sm">
+        <button class="nav-btn px-3 py-2 rounded hover:bg-slate-100" data-target="#overview">行程總覽</button>
+        <button class="nav-btn px-3 py-2 rounded hover:bg-slate-100" data-target="#logistics">交通住宿</button>
+        <button class="nav-btn px-3 py-2 rounded hover:bg-slate-100" data-target="#dayplans">每日行程</button>
+        <button class="nav-btn px-3 py-2 rounded hover:bg-slate-100" data-target="#foodmap">美食地圖</button>
+        <button class="nav-btn px-3 py-2 rounded hover:bg-slate-100" data-target="#prep">行前準備</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 py-8 space-y-12">
+    <!-- Overview -->
+    <section id="overview" class="section">
+      <h2 class="text-2xl font-bold mb-4">行程總覽與重點</h2>
+      <p class="mb-4">假設多雲時晴、無雨狀態下逆時針環島，海線景觀佳、補給便利。</p>
+      <div class="grid md:grid-cols-3 gap-4">
+        <div class="p-4 bg-white rounded-xl border">
+          <h3 class="font-semibold mb-2">Day 1：那霸 → 恩納 → 名護（約110 km）</h3>
+          <p>亮點：中城城跡、恩納海岸、名護市區美食。</p>
+        </div>
+        <div class="p-4 bg-white rounded-xl border">
+          <h3 class="font-semibold mb-2">Day 2：名護 → 本部 → 古宇利 → 恩納（約95 km）</h3>
+          <p>亮點：道之驛許田、古宇利大橋、今歸仁城跡。</p>
+        </div>
+        <div class="p-4 bg-white rounded-xl border">
+          <h3 class="font-semibold mb-2">Day 3：恩納 → 讀谷 → 中城 → 那霸（約100 km）</h3>
+          <p>亮點：讀谷陶藝街、中城海濱、國際通。</p>
+        </div>
+      </div>
+      <div class="grid md:grid-cols-2 gap-6 mt-6">
+        <div class="bg-white border rounded-xl p-4">
+          <h4 class="font-semibold mb-3">每日距離與餐飲花費比較</h4>
+          <canvas id="costTimeChart" height="200"></canvas>
+          <p class="text-xs text-slate-500 mt-2">懸停查看細節，點擊圖例顯示/隱藏系列。</p>
+        </div>
+        <div class="bg-white border rounded-xl p-4">
+          <h4 class="font-semibold mb-3">策略與節奏</h4>
+          <ul class="list-disc pl-5 space-y-2 text-sm">
+            <li>避開正午高溫，補給以便利商店與道之驛為主。</li>
+            <li>午餐以海鮮或家常菜，晚餐安排招牌或預約制餐廳。</li>
+            <li>沿海路段風大，注意側風與橋上風切。</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Logistics -->
+    <section id="logistics" class="section hidden">
+      <h2 class="text-2xl font-bold mb-4">交通與住宿建議</h2>
+      <div class="bg-white rounded-xl border p-4 space-y-4">
+        <div>
+          <h3 class="font-semibold mb-2">單車租借</h3>
+          <p class="text-sm">名護、恩納、本部多家店提供日租與維修服務，建議自備補胎工具與備用內胎。</p>
+        </div>
+        <div>
+          <h3 class="font-semibold mb-2">休息站與補給</h3>
+          <p class="text-sm">道之驛許田與中城PA為主要補給點，設施完善；便利商店分布沿線。</p>
+        </div>
+        <div>
+          <h3 class="font-semibold mb-2">住宿區位</h3>
+          <p class="text-sm">建議名護、恩納、那霸海濱區，便於晚間補給與隔日出發。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Day Plans -->
+    <section id="dayplans" class="section hidden">
+      <h2 class="text-2xl font-bold mb-4">每日行程（Timeline）</h2>
+
+      <!-- Day 1 -->
+      <div class="bg-white rounded-xl border p-4 mb-8">
+        <h3 class="font-semibold text-lg mb-2">Day 1：那霸 → 恩納 → 名護</h3>
+        <div class="relative pl-6">
+          <div class="absolute left-2 top-1 bottom-1 w-0.5 bg-slate-200"></div>
+          <!-- 06:00–07:00 -->
+          <div class="mb-6 flex items-start gap-3">
+            <div class="mt-1 h-2 w-2 rounded-full bg-indigo-500"></div>
+            <div>
+              <div class="font-semibold">06:00–07:00 裝備檢查與出發</div>
+              <a class="text-sky-600 text-sm underline" href="https://maps.google.com/?q=26.2124,127.6792" target="_blank">那霸市區飯店</a>
+            </div>
+          </div>
+          <!-- 07:00–09:00 -->
+          <div class="mb-6 flex items-start gap-3">
+            <div class="mt-1 h-2 w-2 rounded-full bg-indigo-500"></div>
+            <div>
+              <div class="font-semibold">07:00–09:00 騎 那霸 → 中城城跡（35 km）</div>
+              <a class="text-sky-600 text-sm underline" href="https://maps.google.com/?q=26.2933,127.7980" target="_blank">中城城跡</a>
+            </div>
+          </div>
+          <!-- 09:00–09:30 -->
+          <div class="mb-6 flex items-start gap-3">
+            <div class="mt-1 h-2 w-2 rounded-full bg-emerald-500"></div>
+            <div>
+              <div class="font-semibold">09:00–09:30 休息：中城城跡公園</div>
+              <div class="text-sm">平均花費約500円</div>
+              <a class="text-sky-600 text-sm underline" href="https://maps.google.com/?q=26.2933,127.7980" target="_blank">Google Maps</a>
+            </div>
+          </div>
+          <!-- 09:30–12:00 -->
+          <div class="mb-6 flex items-start gap-3">
+            <div class="mt-1 h-2 w-2 rounded-full bg-indigo-500"></div>
+            <div>
+              <div class="font-semibold">09:30–12:00 騎 中城 → 恩納（40 km）</div>
+              <a class="text-sky-600 text-sm underline" href="https://maps.google.com/?q=26.4958,127.8583" target="_blank">恩納海岸</a>
+            </div>
+          </div>
+          <!-- 12:00–13:00 -->
+          <div class="mb-6 flex items-start gap-3">
+            <div class="mt-1 h-2 w-2 rounded-full bg-rose-500"></div>
+            <div>
+              <div class="font-semibold">12:00–13:00 午餐：海鮮料理濱之家</div>
+              <div class="text-sm">平均2,000–2,500円</div>
+              <a class="text-sky-600 text-sm underline" href="https://maps.google.com/?q=海鮮料理浜の家 恩納村" target="_blank">Google Maps</a>
+            </div>
+          </div>
+          <!-- 13:00–17:00 -->
+          <div class="mb-6 flex items-start gap-3">
+            <div class="mt-1 h-2 w-2 rounded-full bg-indigo-500"></div>
+            <div>
+              <div class="font-semibold">13:00–17:00 騎 恩納 → 名護（35 km）</div>
+              <a class="text-sky-600 text-sm underline" href="https://maps.google.com/?q=26.5919,127.9774" target="_blank">名護市區</a>
+            </div>
+          </div>
+          <!-- 17:00–18:30 -->
+          <div class="mb-6 flex items-start gap-3">
+            <div class="mt-1 h-2 w-2 rounded-full bg-amber-500"></div>
+            <div>
+              <div class="font-semibold">17:00–18:30 入住與休息（名護）</div>
+            </div>
+          </div>
+          <!-- 18:30–20:30 -->
+          <div class="flex items-start gap-3">
+            <div class="mt-1 h-2 w-2 rounded-full bg-rose-500"></div>
+            <div>
+              <div class="font-semibold">18:30–20:30 晚餐：琉球の牛</div>
+              <div class="text-sm">平均4,000–7,500円</div>
+              <a class="text-sky-600 text-sm underline" href="https://maps.google.com/?q=琉球の牛 恩納" target="_blank">Google Maps</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Day 2 -->
+      <div class="bg-white rounded-xl border p-4 mb-8">
+        <h3 class="font-semibold text-lg mb-2">Day 2：名護 → 本部 → 古宇利 → 恩納</h3>
+        <div class="relative pl-6">
+          <div class="absolute left-2 top-1 bottom-1 w-0.5 bg-slate-200"></div>
+          <!-- 07:00–10:00 -->
+          <div class="mb-6 flex items-start gap-3">
+            <div class="mt-1 h-2 w-2 rounded-full bg-indigo-500"></div>
+            <div>
+              <div class="font-semibold">07:00–10:00 騎 名護 → 本部（28 km）</div>
+              <a class="text-sky-600 text-sm underline" href="https://maps.google.com/?q=26.6919,127.8774" target="_blank">本部町</a>
+            </div>
+          </div>
+          <!-- 10:00–10:30 -->
+          <div class="mb-6 flex items-start gap-3">
+            <div class="mt-1 h-2 w-2 rounded-full bg-emerald-500"></div>
+            <div>
+              <div class="font-semibold">10:00–10:30 補給：道之驛許田</div>
+              <div class="text-sm">約800円</div>
+              <a class="text-sky-600 text-sm underline" href="https://maps.google.com/?q=道の駅 許田" target="_blank">Google Maps</a>
+            </div>
+          </div>
+          <!-- 10:30–12:30 -->
+          <div class="mb-6 flex items-start gap-3">
+            <div class="mt-1 h-2 w-2 rounded-full bg-indigo-500"></div>
+            <div>
+              <div class="font-semibold">10:30–12:30 騎 本部 → 古宇利島（25 km）</div>
+              <a class="text-sky-600 text-sm underline" href="https://maps.google.com/?q=26.7056,127.9494" target="_blank">古宇利大橋</a>
+            </div>
+          </div>
+          <!-- 12:30–13:30 -->
+          <div class="mb-6 flex items-start gap-3">
+            <div class="mt-1 h-2 w-2 rounded-full bg-rose-500"></div>
+            <div>
+              <div class="font-semibold">12:30–13:30 午餐：海邊咖啡</div>
+              <div class="text-sm">約1,500–1,800円</div>
+              <a class="text-sky-600 text-sm underline" href="https://maps.google.com/?q=古宇利島 カフェ" target="_blank">Google Maps</a>
+            </div>
+          </div>
+          <!-- 13:30–17:00 -->
+          <div class="mb-6 flex items-start gap-3">
+            <div class="mt-1 h-2 w-2 rounded-full bg-indigo-500"></div>
+            <div>
+              <div class="font-semibold">13:30–17:00 騎 古宇利 → 今歸仁 → 恩納（42 km）</div>
+              <a class="text-sky-600 text-sm underline" href="https://maps.google.com/?q=今帰仁城跡" target="_blank">今歸仁城跡</a>
+            </div>
+          </div>
+          <!-- 17:30–20:30 -->
+          <div class="flex items-start gap-3">
+            <div class="mt-1 h-2 w-2 rounded-full bg-rose-500"></div>
+            <div>
+              <div class="font-semibold">17:30–20:30 晚餐與泡湯</div>
+              <div class="text-sm">約3,000–7,500円</div>
+              <a class="text-sky-600 text-sm underline" href="https://maps.google.com/?q=恩納村 レストラン" target="_blank">Google Maps</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Day 3 -->
+      <div class="bg-white rounded-xl border p-4">
+        <h3 class="font-semibold text-lg mb-2">Day 3：恩納 → 讀谷 → 中城 → 那霸</h3>
+        <div class="relative pl-6">
+          <div class="absolute left-2 top-1 bottom-1 w-0.5 bg-slate-200"></div>
+          <!-- 07:00–10:00 -->
+          <div class="mb-6 flex items-start gap-3">
+            <div class="mt-1 h-2 w-2 rounded-full bg-indigo-500"></div>
+            <div>
+              <div class="font-semibold">07:00–10:00 騎 恩納 → 讀谷（30 km）</div>
+              <a class="text-sky-600 text-sm underline" href="https://maps.google.com/?q=読谷村 陶芸" target="_blank">讀谷村</a>
+            </div>
+          </div>
+          <!-- 10:00–10:30 -->
+          <div class="mb-6 flex items-start gap-3">
+            <div class="mt-1 h-2 w-2 rounded-full bg-emerald-500"></div>
+            <div>
+              <div class="font-semibold">10:00–10:30 休息：陶藝街咖啡</div>
+              <div class="text-sm">約1,000–1,200円</div>
+              <a class="text-sky-600 text-sm underline" href="https://maps.google.com/?q=読谷村 カフェ" target="_blank">Google Maps</a>
+            </div>
+          </div>
+          <!-- 10:30–12:30 -->
+          <div class="mb-6 flex items-start gap-3">
+            <div class="mt-1 h-2 w-2 rounded-full bg-indigo-500"></div>
+            <div>
+              <div class="font-semibold">10:30–12:30 騎 讀谷 → 中城海濱（35 km）</div>
+              <a class="text-sky-600 text-sm underline" href="https://maps.google.com/?q=中城海岸" target="_blank">中城海濱</a>
+            </div>
+          </div>
+          <!-- 12:30–13:30 -->
+          <div class="mb-6 flex items-start gap-3">
+            <div class="mt-1 h-2 w-2 rounded-full bg-rose-500"></div>
+            <div>
+              <div class="font-semibold">12:30–13:30 午餐：中城海濱餐廳</div>
+              <div class="text-sm">約2,000–2,200円</div>
+              <a class="text-sky-600 text-sm underline" href="https://maps.google.com/?q=中城 レストラン" target="_blank">Google Maps</a>
+            </div>
+          </div>
+          <!-- 13:30–18:30 -->
+          <div class="flex items-start gap-3">
+            <div class="mt-1 h-2 w-2 rounded-full bg-indigo-500"></div>
+            <div>
+              <div class="font-semibold">13:30–18:30 騎 中城 → 那霸國際通（35 km）</div>
+              <a class="text-sky-600 text-sm underline" href="https://maps.google.com/?q=那覇 国際通" target="_blank">國際通</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Food Map -->
+    <section id="foodmap" class="section hidden">
+      <h2 class="text-2xl font-bold mb-4">美食地圖與篩選</h2>
+      <div class="bg-white rounded-xl border p-4">
+        <div class="flex flex-wrap items-center gap-3 mb-4">
+          <span class="text-sm">分類篩選：</span>
+          <button class="filter-btn px-3 py-1 rounded-full border text-sm" data-cat="all">全部</button>
+          <button class="filter-btn px-3 py-1 rounded-full border text-sm" data-cat="海鮮">海鮮</button>
+          <button class="filter-btn px-3 py-1 rounded-full border text-sm" data-cat="燒肉">燒肉</button>
+          <button class="filter-btn px-3 py-1 rounded-full border text-sm" data-cat="甜點">甜點</button>
+          <button class="filter-btn px-3 py-1 rounded-full border text-sm" data-cat="咖啡">咖啡</button>
+          <button class="filter-btn px-3 py-1 rounded-full border text-sm" data-cat="居酒屋">居酒屋</button>
+        </div>
+        <div id="food-list" class="grid md:grid-cols-2 gap-4">
+          <!-- Food cards -->
+          <div class="food-card p-4 border rounded-xl" data-cat="海鮮">
+            <h3 class="font-semibold">海鮮料理濱之家（恩納）</h3>
+            <p class="text-sm">平均2,000–2,500円；招牌：海膽焗烤龍蝦[21][6].</p>
+            <a class="text-sky-600 text-sm underline" href="https://maps.google.com/?q=海鮮料理浜の家 恩納村" target="_blank">Google Maps</a>
+          </div>
+          <div class="food-card p-4 border rounded-xl" data-cat="燒肉">
+            <h3 class="font-semibold">琉球の牛（名護/恩納）</h3>
+            <p class="text-sm">晚餐4,000–7,500円；午餐套餐實惠建議預約[3][21].</p>
+            <a class="text-sky-600 text-sm underline" href="https://maps.google.com/?q=琉球の牛 恩納" target="_blank">Google Maps</a>
+          </div>
+          <div class="food-card p-4 border rounded-xl" data-cat="甜點">
+            <h3 class="font-semibold">道之驛 許田（名護）</h3>
+            <p class="text-sm">冰淇淋、季節水果；平均600–900円[4][10].</p>
+            <a class="text-sky-600 text-sm underline" href="https://maps.google.com/?q=道の駅 許田" target="_blank">Google Maps</a>
+          </div>
+          <div class="food-card p-4 border rounded-xl" data-cat="咖啡">
+            <h3 class="font-semibold">古宇利島海邊咖啡</h3>
+            <p class="text-sm">海景輕食與甜點；平均1,500–1,800円。</p>
+            <a class="text-sky-600 text-sm underline" href="https://maps.google.com/?q=古宇利島 カフェ" target="_blank">Google Maps</a>
+          </div>
+          <div class="food-card p-4 border rounded-xl" data-cat="居酒屋">
+            <h3 class="font-semibold">恩納村居酒屋與泡湯</h3>
+            <p class="text-sm">套餐3,000–7,500円，飯店或周邊居酒屋皆可[3][21][15].</p>
+            <a class="text-sky-600 text-sm underline" href="https://maps.google.com/?q=恩納村 居酒屋" target="_blank">Google Maps</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Preparation -->
+    <section id="prep" class="section hidden">
+      <h2 class="text-2xl font-bold mb-4">行前準備與安全</h2>
+      <div class="bg-white rounded-xl border p-4 grid md:grid-cols-2 gap-6">
+        <div>
+          <h3 class="font-semibold mb-2">裝備清單</h3>
+          <ul class="list-disc pl-5 space-y-2 text-sm">
+            <li>公路車或平把車、頭盔、手套、防曬、雨衣。</li>
+            <li>補胎工具、備用內胎×2、打氣筒、多功能工具。</li>
+            <li>燈具、水壺×2、能量膠、電解質錠、行動電源。</li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="font-semibold mb-2">路況與節奏</h3>
+          <ul class="list-disc pl-5 space-y-2 text-sm">
+            <li>橋梁與海岸側風強，降低速度保持穩定。</li>
+            <li>2–3小時補給一次，便利商店與道之驛為主。</li>
+            <li>遵守左側通行與號誌，市區車流較多。</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-slate-200 py-6 text-center text-xs text-slate-500">
+    本頁僅供參考，實際以現地公告為準。
+  </footer>
+
+  <script>
+    // Navbar
+    const sections = document.querySelectorAll('.section');
+    const navBtns = document.querySelectorAll('.nav-btn');
+    function showSection(id) {
+      sections.forEach(s => s.classList.add('hidden'));
+      document.querySelector(id).classList.remove('hidden');
+    }
+    navBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        showSection(btn.dataset.target);
+        navBtns.forEach(b => b.classList.remove('bg-slate-900','text-white'));
+        btn.classList.add('bg-slate-900','text-white');
+      });
+    });
+    showSection('#overview');
+    navBtns[0].classList.add('bg-slate-900','text-white');
+
+    // Food filter
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const foodCards = document.querySelectorAll('.food-card');
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const cat = btn.dataset.cat;
+        filterBtns.forEach(b => b.classList.remove('bg-slate-900','text-white'));
+        btn.classList.add('bg-slate-900','text-white');
+        foodCards.forEach(card => {
+          card.classList.toggle('hidden', !(cat==='all'||card.dataset.cat===cat));
+        });
+      });
+    });
+
+    // Chart.js
+    const ctx = document.getElementById('costTimeChart');
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Day 1','Day 2','Day 3'],
+        datasets: [
+          {
+            label: '距離 (km)',
+            data: [110,95,100],
+            backgroundColor: 'rgba(59,130,246,0.6)',
+            borderColor: 'rgba(59,130,246,1)',
+            yAxisID: 'y'
+          },
+          {
+            label: '餐飲估計 (円)',
+            data: [7000,10100,3400],
+            type: 'line',
+            borderColor: 'rgba(16,185,129,1)',
+            backgroundColor: 'rgba(16,185,129,0.2)',
+            tension: 0.3,
+            yAxisID: 'y1'
+          }
+        ]
+      },
+      options: {
+        responsive:true,
+        interaction:{mode:'index',intersect:false},
+        scales:{
+          y:{type:'linear',position:'left',title:{display:true,text:'距離 (km)'}},
+          y1:{type:'linear',position:'right',title:{display:true,text:'餐飲估計 (円)'},grid:{drawOnChartArea:false}}
+        }
+      }
+    });
+  </script>
+</body>
+</html>
